@@ -171,6 +171,11 @@ class Game:
         if target_position[0] in map_max_x and target_position[1] in map_max_y:
             target_tile_type = int(self.area_floorplan[target_position[1]][target_position[0]])
             if target_tile_type < 1:
+                if self.hero.get_hero_position() == target_position:
+                    return False
+                for i in range(0, len(self.enemies)):
+                    if self.enemies[i].get_position() == target_position:
+                        return False
                 return True
             else:
                 return False
