@@ -123,7 +123,7 @@ class Game:
 
     def turn_and_move_hero(self, direction):
         self.hero_heading = direction # NOTE: Not writing back to model (hero object). Only view needs it.
-        if self.is_way_free(direction) == True:
+        if self.is_way_free(direction):
             self.hero.set_hero_position(self.movement_alterations[direction])
             self.status_message = '-'
         else:
@@ -153,6 +153,9 @@ class Game:
             # NOTE: ^IDK why it becomes str.
             print(target_tile_type)
             if target_tile_type < 1:
+                for i in range(0, len(self.enemies)):
+                    if self.enemies[i].get_position() == target_position:
+                        return False
                 return True
             else:
                 return False
