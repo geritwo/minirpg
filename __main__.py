@@ -59,7 +59,7 @@ class Game:
         for i in range(number_of_enemies):
             position_index = random.randrange(len(self.valid_character_positions)-3) # Pick random pos from valid (w safety buffer - avoid out of range)
             position = self.valid_character_positions[position_index] # Set position there
-            if position in enemy_start_positions or position == [0, 0]: # Check if not taken,
+            if position in enemy_start_positions or position == [1, 1]: # Check if not taken,
                 position = self.valid_character_positions[position_index + 2] # if so, pick position two indexes further
             enemy_start_positions.append(position) # add position to list
 

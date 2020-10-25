@@ -32,7 +32,7 @@ class AreaMap:
 class Hero:
 
     def __init__(self):
-        self.hero_position = [0, 0]
+        self.hero_position = [1, 1]
         self.hero_level = 1
         self.max_hp = 10
         self.hp = 10
