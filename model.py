@@ -53,6 +53,9 @@ class Character:
         stats_output = [self.hp, self.dp, self.sp]
         return stats_output
 
+    def set_hp(self, hp):
+        self.hp = hp
+
 class Hero(Character):
 
     def __init__(self):

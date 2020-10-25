@@ -21,7 +21,7 @@ class Game:
 
     def __init__(self):
         self.model = model.AreaMap()
-        self.enemies = {}
+        self.characters = []
 
         # *** [ Movement variables, rulesets ] ***
         self.hero_heading = 'Down'
@@ -45,13 +45,15 @@ class Game:
         self.area_floorplan = self.model.get_area_floorplan()
         self.valid_character_positions = self.model.get_valid_character_positions()
 
-        self.generate_enemies() # Enemy stats, starting pos. generated, objects instantiated
+        self.generate_characters()
 
         self.view = view.LevelDisplay(self.area_dimensions)
+
+
+    def generate_characters(self):
+
         self.hero = model.Hero()
-
-
-    def generate_enemies(self):
+        self.characters[0] = self.hero
 
         number_of_enemies = random.randrange(3, 6)
         enemy_start_positions = []
@@ -74,14 +76,14 @@ class Game:
                 hp += random.randrange(1, 7)
                 dp += random.randrange(1, 7)/2
                 sp += self.current_level
-                self.enemies[i] = model.Character('Boss', enemy_start_positions[i], hp, dp, sp, has_key=False)
+                self.characters[1] = model.Character('Boss', enemy_start_positions[i], hp, dp, sp, has_key=False)
 
             else:
                 if i == keyholder:
                     has_key = True
                 else:
                     has_key = False
-                self.enemies[i] = model.Character('Guard', enemy_start_positions[i], hp, dp, sp, has_key)
+                self.characters[i + 1] = model.Character('Guard', enemy_start_positions[i], hp, dp, sp, has_key)
 
 # *** [ Game View Controller Functions ] ***
 
@@ -90,11 +92,15 @@ class Game:
         self.view.display_area(self.area_dimensions, self.area_floorplan)
         self.view.display_hero(self.hero.get_position(), self.hero_heading)
 
-        self.view.display_enemies('Boss', self.enemies[0].get_position())
-        for i in range(1, len(self.enemies)):
-            self.view.display_enemies('Guard', self.enemies[i].get_position())
+        for character in self.characters:
+            type = character.get_type()
+            self.view.display_characters(
+                type,
+                character.get_position()
+            )
 
-        self.view.dislay_stats(self.hero.get_level(), self.hero.get_max_hp(), self.hero.get_stats(), [0, 0, 0], self.status_message)
+            if type == "Hero":
+                self.view.display_stats(character.get_level(), character.get_max_hp(), character.get_stats(), [0, 0, 0], self.status_message())
 
 
 # *** [ Game keyboard IO] ***
@@ -128,15 +134,20 @@ class Game:
 
     # WORK IN PROGRESS HERE
     def move_enemies(self):
-        for i in range(0, len(self.enemies)):
+        for i in range(1, len(self.characters)):
             direction = self.enemy_movement_keys[random.randint(0, 3)]
-            if self.is_enemys_way_free(self.enemies[i], direction) == True:
-                self.enemies[i].set_position(self.movement_alterations[direction])
+            if self.is_enemys_way_free(self.characters[i], direction) == True:
+                self.characters[i].set_position(self.movement_alterations[direction])
             else:
                 break
 
-    def fight(self, attacker, defender):
-        attack_points = attacker.get
+    def attack(self, attacker, defender):
+        attack_points = attacker.get_stats()[2]
+        defense_ponts, defender_hp = defender.get_stats()[1], defender.get_stats()[0]
+        if attack_points > defense_points:
+            defender.set_hp(defender_hp - 1)
+        if defender_hp = 0:
+            self.enemies.pop(defender)
 
     def is_way_free(self, direction):
         target_position = [0, 0] # NOTE: x, y = column, row
