@@ -74,19 +74,14 @@ class Game:
                 hp += random.randrange(1, 7)
                 dp += random.randrange(1, 7)/2
                 sp += self.current_level
-                self.enemies[i] = model.Boss('Boss', enemy_start_positions[i], hp, dp, sp)
+                self.enemies[i] = model.Enemy('Boss', enemy_start_positions[i], hp, dp, sp, has_key=False)
 
             else:
                 if i == keyholder:
                     has_key = True
                 else:
                     has_key = False
-                self.enemies[i] = model.Guard('Guard', enemy_start_positions[i], hp, dp, sp, has_key)
-
-            # NOTE: Enemy generator debug aid:
-            # print(self.enemies[i])
-            # print('Enemy stats:\nPOS:', position, '\nhp', hp, '\ndp:', dp, '\nsp:', sp)
-
+                self.enemies[i] = model.Enemy('Guard', enemy_start_positions[i], hp, dp, sp, has_key)
 
 # *** [ Game View Controller Functions ] ***
 

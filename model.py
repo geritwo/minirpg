@@ -51,30 +51,7 @@ class Hero:
         stats_output = [self.hero_level, self.max_hp, self.hp, self.dp, self.sp]
         return stats_output
 
-class Boss:
-
-    def __init__(self, character_type, position, hp, dp, sp):
-        self.character_type = character_type
-        self.position = position
-        self.hp = hp
-        self.dp = dp
-        self.sp = sp
-
-    def set_position(self, alteration):
-        self.position[0] += alteration[0]
-        self.position[1] += alteration[1]
-
-    def get_position(self):
-        return self.position
-
-    def get_type(self):
-        return self.character_type
-
-    def get_stats(self):
-        stats_output = [self.hp, self.dp, self.sp]
-        return stats_output
-
-class Guard:
+class Enemy:
 
     def __init__(self, character_type, position, hp, dp, sp, has_key):
         self.character_type = character_type
