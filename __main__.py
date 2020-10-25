@@ -53,7 +53,7 @@ class Game:
     def generate_characters(self):
 
         self.hero = model.Hero()
-        self.characters[0] = self.hero
+        self.characters.append(self.hero)
 
         number_of_enemies = random.randrange(3, 6)
         enemy_start_positions = []
@@ -76,31 +76,28 @@ class Game:
                 hp += random.randrange(1, 7)
                 dp += random.randrange(1, 7)/2
                 sp += self.current_level
-                self.characters[1] = model.Character('Boss', enemy_start_positions[i], hp, dp, sp, has_key=False)
+                self.characters.append(model.Character('Boss', enemy_start_positions[i], hp, dp, sp, has_key=False))
 
             else:
                 if i == keyholder:
                     has_key = True
                 else:
                     has_key = False
-                self.characters[i + 1] = model.Character('Guard', enemy_start_positions[i], hp, dp, sp, has_key)
+                self.characters.append(model.Character('Guard', enemy_start_positions[i], hp, dp, sp, has_key))
 
 # *** [ Game View Controller Functions ] ***
 
     def game_phase_display(self):
         self.view.clear_display() # NOTE: Works without cleaning too. Maybe this spares memory?
         self.view.display_area(self.area_dimensions, self.area_floorplan)
-        self.view.display_hero(self.hero.get_position(), self.hero_heading)
 
         for character in self.characters:
             type = character.get_type()
-            self.view.display_characters(
-                type,
-                character.get_position()
-            )
-
             if type == "Hero":
-                self.view.display_stats(character.get_level(), character.get_max_hp(), character.get_stats(), [0, 0, 0], self.status_message())
+                self.view.display_hero(self.hero.get_position(), self.hero_heading)
+                #self.view.display_stats(character.get_level(), character.get_max_hp(), character.get_stats(), [0, 0, 0], self.status_message())
+            else:
+                self.view.display_enemies(type, character.get_position())
 
 
 # *** [ Game keyboard IO] ***
@@ -124,7 +121,7 @@ class Game:
 
     def turn_and_move_hero(self, direction):
         self.hero_heading = direction # NOTE: Not writing back to model (hero object). Only view needs it.
-        if self.is_way_free(direction):
+        if self.is_way_free(self.hero, direction):
             self.hero.set_position(self.movement_alterations[direction])
             self.status_message = '-'
         else:
@@ -136,7 +133,7 @@ class Game:
     def move_enemies(self):
         for i in range(1, len(self.characters)):
             direction = self.enemy_movement_keys[random.randint(0, 3)]
-            if self.is_enemys_way_free(self.characters[i], direction) == True:
+            if self.is_way_free(self.characters[i], direction) == True:
                 self.characters[i].set_position(self.movement_alterations[direction])
             else:
                 break
@@ -146,44 +143,24 @@ class Game:
         defense_ponts, defender_hp = defender.get_stats()[1], defender.get_stats()[0]
         if attack_points > defense_points:
             defender.set_hp(defender_hp - 1)
-        if defender_hp = 0:
+        if defender_hp == 0:
             self.enemies.pop(defender)
 
-    def is_way_free(self, direction):
+    def is_way_free(self, character, direction):
         target_position = [0, 0] # NOTE: x, y = column, row
         map_max_x = range(self.area_dimensions[1])
         map_max_y = range(self.area_dimensions[0])
 
-        target_position[0] = self.movement_alterations[direction][0] + self.hero.get_position()[0]
-        target_position[1] = self.movement_alterations[direction][1] + self.hero.get_position()[1]
+        target_position[0] = self.movement_alterations[direction][0] + character.get_position()[0]
+        target_position[1] = self.movement_alterations[direction][1] + character.get_position()[1]
 
         if target_position[0] in map_max_x and target_position[1] in map_max_y:
             target_tile_type = int(self.area_floorplan[target_position[1]][target_position[0]])
             # NOTE: ^IDK why it becomes str.
             print(target_tile_type)
             if target_tile_type < 1:
-                for i in range(0, len(self.enemies)):
-                    if self.enemies[i].get_position() == target_position:
-                        return False
-                return True
-            else:
-                return False
-
-    def is_enemys_way_free(self, enemy, direction):
-        target_position = [0, 0] # NOTE: x, y = column, row
-        map_max_x = range(self.area_dimensions[1])
-        map_max_y = range(self.area_dimensions[0])
-
-        target_position[0] = self.movement_alterations[direction][0] + enemy.get_position()[0]
-        target_position[1] = self.movement_alterations[direction][1] + enemy.get_position()[1]
-
-        if target_position[0] in map_max_x and target_position[1] in map_max_y:
-            target_tile_type = int(self.area_floorplan[target_position[1]][target_position[0]])
-            if target_tile_type < 1:
-                if self.hero.get_position() == target_position:
-                    return False
-                for i in range(0, len(self.enemies)):
-                    if self.enemies[i].get_position() == target_position:
+                for i in range(0, len(self.characters)):
+                    if self.characters[i].get_position() == target_position:
                         return False
                 return True
             else:
