@@ -74,14 +74,14 @@ class Game:
                 hp += random.randrange(1, 7)
                 dp += random.randrange(1, 7)/2
                 sp += self.current_level
-                self.enemies[i] = model.Enemy('Boss', enemy_start_positions[i], hp, dp, sp, has_key=False)
+                self.enemies[i] = model.Character('Boss', enemy_start_positions[i], hp, dp, sp, has_key=False)
 
             else:
                 if i == keyholder:
                     has_key = True
                 else:
                     has_key = False
-                self.enemies[i] = model.Enemy('Guard', enemy_start_positions[i], hp, dp, sp, has_key)
+                self.enemies[i] = model.Character('Guard', enemy_start_positions[i], hp, dp, sp, has_key)
 
 # *** [ Game View Controller Functions ] ***
 
@@ -94,7 +94,7 @@ class Game:
         for i in range(1, len(self.enemies)):
             self.view.display_enemies('Guard', self.enemies[i].get_position())
 
-        self.view.dislay_stats(self.hero.get_stats(), [0, 0, 0], self.status_message)
+        self.view.dislay_stats(self.hero.get_level(), self.hero.get_max_hp(), self.hero.get_stats(), [0, 0, 0], self.status_message)
 
 
 # *** [ Game keyboard IO] ***

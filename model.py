@@ -29,29 +29,7 @@ class AreaMap:
     def get_valid_character_positions(self):
         return self.valid_character_positions
 
-class Hero:
-
-    def __init__(self):
-        self.character_type = "Hero"
-        self.hero_position = [1, 1]
-        self.hero_level = 1
-        self.max_hp = 10
-        self.hp = 10
-        self.dp = 6
-        self.sp = 3
-
-    def get_position(self):
-        return self.hero_position
-
-    def set_position(self, alteration):
-        self.hero_position[0] += alteration[0]
-        self.hero_position[1] += alteration[1]
-
-    def get_stats(self):
-        stats_output = [self.hero_level, self.max_hp, self.hp, self.dp, self.sp]
-        return stats_output
-
-class Enemy:
+class Character:
 
     def __init__(self, character_type, position, hp, dp, sp, has_key):
         self.character_type = character_type
@@ -74,3 +52,16 @@ class Enemy:
     def get_stats(self):
         stats_output = [self.hp, self.dp, self.sp]
         return stats_output
+
+class Hero(Character):
+
+    def __init__(self):
+        super().__init__("Hero", [1, 1], 10, 6, 3, False)
+        self.level = 1
+        self.max_hp = 10
+
+    def get_level(self):
+        return self.level
+
+    def get_max_hp(self):
+        return self.max_hp

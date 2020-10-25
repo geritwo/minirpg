@@ -65,9 +65,9 @@ class LevelDisplay:
 
         self.canvas.create_image(enemy_position[0]*self.tile_width, enemy_position[1]*self.tile_width, anchor=NW, image=enemy_view_image)
 
-    def dislay_stats(self, hero_stats, enemy_stats, action):
+    def dislay_stats(self, hero_level, hero_max_hp, hero_stats, enemy_stats, action):
 
-        hero_stats_display = ' *** STATS ***\n\n Hero (Level {})\n\n | HP: {}/{} \n | DP: {} \n | SP: {}'.format(hero_stats[0], hero_stats[1], hero_stats[2], hero_stats[3], hero_stats[4])
+        hero_stats_display = f" *** STATS ***\n\n Hero (Level {hero_level})\n\n | HP: {hero_stats[0]}/{hero_max_hp} \n | DP: {hero_stats[1]} \n | SP: {hero_stats[2]}"
 
         self.canvas.create_text(self.canvas_width-self.status_area_width, 0, text=hero_stats_display, anchor=NW, fill='white', width=self.status_area_width, font='14')
 
