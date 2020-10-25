@@ -81,7 +81,7 @@ class Game:
                     has_key = True
                 else:
                     has_key = False
-                self.enemies[i] = model.Skeleton('Skeleton', enemy_start_positions[i], hp, dp, sp, has_key)
+                self.enemies[i] = model.Guard('Guard', enemy_start_positions[i], hp, dp, sp, has_key)
 
             # NOTE: Enemy generator debug aid:
             # print(self.enemies[i])
@@ -93,13 +93,13 @@ class Game:
     def game_phase_display(self):
         self.view.clear_display() # NOTE: Works without cleaning too. Maybe this spares memory?
         self.view.display_area(self.area_dimensions, self.area_floorplan)
-        self.view.display_hero(self.hero.get_hero_position(), self.hero_heading)
+        self.view.display_hero(self.hero.get_position(), self.hero_heading)
 
         self.view.display_enemies('Boss', self.enemies[0].get_position())
         for i in range(1, len(self.enemies)):
-            self.view.display_enemies('Skeleton', self.enemies[i].get_position())
+            self.view.display_enemies('Guard', self.enemies[i].get_position())
 
-        self.view.dislay_stats(self.hero.get_hero_stats(), [0, 0, 0], self.status_message)
+        self.view.dislay_stats(self.hero.get_stats(), [0, 0, 0], self.status_message)
 
 
 # *** [ Game keyboard IO] ***
@@ -119,12 +119,12 @@ class Game:
         else:
             print('Invalid command:', key_pressed) # NOTE: Indev.
 
-# *** [ Character movement ] ***
+# *** [ Character movement and interaction ] ***
 
     def turn_and_move_hero(self, direction):
         self.hero_heading = direction # NOTE: Not writing back to model (hero object). Only view needs it.
         if self.is_way_free(direction):
-            self.hero.set_hero_position(self.movement_alterations[direction])
+            self.hero.set_position(self.movement_alterations[direction])
             self.status_message = '-'
         else:
             self.status_message = 'BANG!'
@@ -140,13 +140,16 @@ class Game:
             else:
                 break
 
+    def fight(self, attacker, defender):
+        attack_points = attacker.get
+
     def is_way_free(self, direction):
         target_position = [0, 0] # NOTE: x, y = column, row
         map_max_x = range(self.area_dimensions[1])
         map_max_y = range(self.area_dimensions[0])
 
-        target_position[0] = self.movement_alterations[direction][0] + self.hero.get_hero_position()[0]
-        target_position[1] = self.movement_alterations[direction][1] + self.hero.get_hero_position()[1]
+        target_position[0] = self.movement_alterations[direction][0] + self.hero.get_position()[0]
+        target_position[1] = self.movement_alterations[direction][1] + self.hero.get_position()[1]
 
         if target_position[0] in map_max_x and target_position[1] in map_max_y:
             target_tile_type = int(self.area_floorplan[target_position[1]][target_position[0]])
@@ -171,7 +174,7 @@ class Game:
         if target_position[0] in map_max_x and target_position[1] in map_max_y:
             target_tile_type = int(self.area_floorplan[target_position[1]][target_position[0]])
             if target_tile_type < 1:
-                if self.hero.get_hero_position() == target_position:
+                if self.hero.get_position() == target_position:
                     return False
                 for i in range(0, len(self.enemies)):
                     if self.enemies[i].get_position() == target_position:

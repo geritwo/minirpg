@@ -32,6 +32,7 @@ class AreaMap:
 class Hero:
 
     def __init__(self):
+        self.character_type = "Hero"
         self.hero_position = [1, 1]
         self.hero_level = 1
         self.max_hp = 10
@@ -39,21 +40,21 @@ class Hero:
         self.dp = 6
         self.sp = 3
 
-    def get_hero_position(self):
+    def get_position(self):
         return self.hero_position
 
-    def set_hero_position(self, alteration):
+    def set_position(self, alteration):
         self.hero_position[0] += alteration[0]
         self.hero_position[1] += alteration[1]
 
-    def get_hero_stats(self):
+    def get_stats(self):
         stats_output = [self.hero_level, self.max_hp, self.hp, self.dp, self.sp]
         return stats_output
 
 class Boss:
 
-    def __init__(self, enemy_type, position, hp, dp, sp):
-        self.enemy_type = enemy_type
+    def __init__(self, character_type, position, hp, dp, sp):
+        self.character_type = character_type
         self.position = position
         self.hp = hp
         self.dp = dp
@@ -66,17 +67,17 @@ class Boss:
     def get_position(self):
         return self.position
 
-    def get_enemy_type(self):
-        return self.enemy_type
+    def get_type(self):
+        return self.character_type
 
-    def get_enemy_stats(self):
+    def get_stats(self):
         stats_output = [self.hp, self.dp, self.sp]
         return stats_output
 
-class Skeleton:
+class Guard:
 
-    def __init__(self, enemy_type, position, hp, dp, sp, has_key):
-        self.enemy_type = enemy_type
+    def __init__(self, character_type, position, hp, dp, sp, has_key):
+        self.character_type = character_type
         self.position = position
         self.hp = hp
         self.dp = dp
@@ -90,9 +91,9 @@ class Skeleton:
     def get_position(self):
         return self.position
 
-    def get_enemy_type(self):
-        return self.enemy_type
+    def get_type(self):
+        return self.character_type
 
-    def get_enemy_stats(self):
+    def get_stats(self):
         stats_output = [self.hp, self.dp, self.sp]
         return stats_output

@@ -34,7 +34,7 @@ class LevelDisplay:
         self.hero_right = PhotoImage(file='./img/hero-right.png')
 
         self.boss = PhotoImage(file='./img/boss.png')
-        self.skeleton = PhotoImage(file='./img/skeleton.png')
+        self.guard = PhotoImage(file='./img/guard.png')
 
 
     # *** [ Display functions in tkinter mainloop ] ***
@@ -60,8 +60,8 @@ class LevelDisplay:
     def display_enemies(self, enemy_type, enemy_position):
         if enemy_type == 'Boss':
             enemy_view_image = self.boss
-        if enemy_type == 'Skeleton':
-            enemy_view_image = self.skeleton
+        if enemy_type == 'Guard':
+            enemy_view_image = self.guard
 
         self.canvas.create_image(enemy_position[0]*self.tile_width, enemy_position[1]*self.tile_width, anchor=NW, image=enemy_view_image)
 
