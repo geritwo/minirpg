@@ -50,8 +50,7 @@ class Character:
         return self.character_type
 
     def get_stats(self):
-        stats_output = [self.hp, self.dp, self.sp]
-        return stats_output
+        return self.hp, self.dp, self.sp
 
     def set_hp(self, hp):
         self.hp = hp

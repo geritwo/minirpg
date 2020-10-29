@@ -95,7 +95,7 @@ class Game:
             type = character.get_type()
             if type == "Hero":
                 self.view.display_hero(self.hero.get_position(), self.hero_heading)
-                #self.view.display_stats(character.get_level(), character.get_max_hp(), character.get_stats(), [0, 0, 0], self.status_message())
+                self.view.display_stats(character.get_level(), character.get_max_hp(), character.get_stats(), [0, 0, 0], self.status_message)
             else:
                 self.view.display_enemies(type, character.get_position())
 
@@ -110,6 +110,7 @@ class Game:
         key_pressed = event.keysym
         movement_keys = ['Up', 'Down', 'Left', 'Right']
         actions_keys = ['space', 'q']
+        print(key_pressed)
         if key_pressed in movement_keys:
             self.turn_and_move_hero(key_pressed)
         elif key_pressed == 'space':
@@ -137,13 +138,28 @@ class Game:
             else:
                 break  # TODO: Make movement more agile
 
-    def attack(self, attacker, defender):
-        attack_points = attacker.get_stats()[2]
-        defense_ponts, defender_hp = defender.get_stats()[1], defender.get_stats()[0]
-        if attack_points > defense_points:
-            defender.set_hp(defender_hp - 1)
-        if defender_hp == 0:
-            self.characters.pop(defender)
+    def attack(self):
+        target_position = [0, 0]
+        target_position[0] = self.movement_alterations[self.hero_heading][0] + self.hero.get_position()[0]
+        target_position[1] = self.movement_alterations[self.hero_heading][1] + self.hero.get_position()[1]
+
+        enemy = None
+        enemy_index = None
+        for i in range(1, len(self.characters)):
+            if self.characters[i].get_position() == target_position:
+                enemy = self.characters[i]
+                enemy_index = i
+
+        if enemy:
+            attack_points = self.hero.get_stats()[2] * 3
+            defense_points, defender_hp = enemy.get_stats()[1], enemy.get_stats()[0]
+            self.status_message = "Attack Guard(DP: {}, HP: {})".format(defense_points, defender_hp)
+            if attack_points > defense_points:
+                enemy.set_hp(defender_hp - 1)
+            if defender_hp == 0:
+                self.characters.pop(enemy_index)
+        else:
+            self.status_message = "Swoosh!"
 
     def is_way_free(self, character, direction):
         target_position = [0, 0] # NOTE: x, y = column, row

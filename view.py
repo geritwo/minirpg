@@ -65,7 +65,7 @@ class LevelDisplay:
 
         self.canvas.create_image(enemy_position[0]*self.tile_width, enemy_position[1]*self.tile_width, anchor=NW, image=enemy_view_image)
 
-    def dislay_stats(self, hero_level, hero_max_hp, hero_stats, enemy_stats, action):
+    def display_stats(self, hero_level, hero_max_hp, hero_stats, enemy_stats, action):
 
         hero_stats_display = f" *** STATS ***\n\n Hero (Level {hero_level})\n\n | HP: {hero_stats[0]}/{hero_max_hp} \n | DP: {hero_stats[1]} \n | SP: {hero_stats[2]}"
 
