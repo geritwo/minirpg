@@ -18,7 +18,7 @@ class LevelDisplay:
 
         # Init canvas:
         self.root = Tk()
-        self.root.title("*** TkWanderer Game ***")
+        self.root.title("*** Mini RPG Game ***")
         self.canvas = Canvas(self.root, width=self.canvas_width, height=self.canvas_height)
         self.canvas.pack()
         self.root.geometry("860x792+20+20")

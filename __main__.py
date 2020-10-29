@@ -112,8 +112,10 @@ class Game:
         actions_keys = ['space', 'q']
         if key_pressed in movement_keys:
             self.turn_and_move_hero(key_pressed)
-        elif key_pressed in actions_keys:
-            print('Command:', key_pressed) # NOTE: Indev
+        elif key_pressed == 'space':
+            self.attack()
+        elif key_pressed == 'q':
+            exit()
         else:
             print('Invalid command:', key_pressed) # NOTE: Indev.
 
@@ -123,20 +125,17 @@ class Game:
         self.hero_heading = direction # NOTE: Not writing back to model (hero object). Only view needs it.
         if self.is_way_free(self.hero, direction):
             self.hero.set_position(self.movement_alterations[direction])
-            self.status_message = '-'
-        else:
-            self.status_message = 'BANG!'
+
         self.move_enemies()
         self.game_phase_display()
 
-    # WORK IN PROGRESS HERE
     def move_enemies(self):
         for i in range(1, len(self.characters)):
             direction = self.enemy_movement_keys[random.randint(0, 3)]
             if self.is_way_free(self.characters[i], direction) == True:
                 self.characters[i].set_position(self.movement_alterations[direction])
             else:
-                break
+                break  # TODO: Make movement more agile
 
     def attack(self, attacker, defender):
         attack_points = attacker.get_stats()[2]
@@ -144,7 +143,7 @@ class Game:
         if attack_points > defense_points:
             defender.set_hp(defender_hp - 1)
         if defender_hp == 0:
-            self.enemies.pop(defender)
+            self.characters.pop(defender)
 
     def is_way_free(self, character, direction):
         target_position = [0, 0] # NOTE: x, y = column, row
